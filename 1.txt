@@ -1,1 +1,84 @@
-ทดสอบระบบ
+<?php
+
+include('db_connect.php');
+
+$q = $_GET['q'];
+
+$p = $_GET['p'];
+$l = $_GET['l'];
+
+$q_ceo = $_GET['q_ceo'];
+
+$p_ceo = $_GET['p_ceo'];
+$l_ceo = $_GET['l_ceo'];
+
+
+if(!empty($q)){
+
+	$strSQL_level = "SELECT * FROM Evaluation WHERE PositionCode = '".$q."'";
+	$objQuery_level = mysql_query($strSQL_level) or die ("Error Query [".$strSQL_level."] ");
+	?>
+		<option value=""> โปรดเลือก </option>
+	<?php
+	while($objResult_level = mysql_fetch_array($objQuery_level))
+	{
+	?>
+		<option value="<?php echo $objResult_level["PositionSetID"];?>"><?php echo $objResult_level["Levelf"];?></option>
+	<?php		
+	}	
+}
+
+
+if(!empty($q_ceo)){
+	
+	$strSQL_level = "SELECT * FROM Evaluation WHERE (PositionSetID != '".$q_ceo."L1"."' AND PositionSetID != '".$q_ceo."L2"."') AND PositionCode = '".$q_ceo."'";
+	$objQuery_level = mysql_query($strSQL_level) or die ("Error Query [".$strSQL_level."] ");
+	?>
+		<option value=""> โปรดเลือก </option>
+	<?php
+	while($objResult_level = mysql_fetch_array($objQuery_level))
+	{
+	?>
+		<option value="<?php echo $objResult_level["PositionSetID"];?>"><?php echo $objResult_level["Levelf_Ceo"];?></option>
+	<?php		
+	}	
+}
+
+if(!empty($l) && !empty($p)){
+
+	$strSQL_rs = "SELECT * FROM Evaluation WHERE PositionCode = '".$p."' AND PositionSetID = '".$l."'";
+	$objQuery_rs = mysql_query($strSQL_rs) or die ("Error Query [".$strSQL_rs."]");
+	$number = 1;
+	while($objResult_rs = mysql_fetch_array($objQuery_rs))
+	{
+	?>
+       <tr>
+        <td><?php echo $number++;?></td>
+        <td><?php echo $objResult_rs["PositionName"];?></td>
+        <td><?php echo $objResult_rs["Levelf"];?></td>
+        <td align="center"><a href="<?php echo $objResult_rs["doc"];?>"><div class="fa fa-download" aria-hidden="true"></div></a></td>
+        <td align="center"><a href="<?php echo $objResult_rs["pdf"];?>" target="_blank"><div class="fa fa-download" aria-hidden="true"></div></a></td>
+      </tr>
+    <?php  
+	}
+}
+
+if(!empty($l_ceo) && !empty($p_ceo)){
+
+	$strSQL_rs = "SELECT * FROM Evaluation WHERE PositionCode = '".$p_ceo."' AND PositionSetID = '".$l_ceo."'";
+	$objQuery_rs = mysql_query($strSQL_rs) or die ("Error Query [".$strSQL_rs."]");
+	$number = 1;
+	while($objResult_rs = mysql_fetch_array($objQuery_rs))
+	{
+	?>
+       <tr>
+        <td><?php echo $number++;?></td>
+        <td><?php echo $objResult_rs["PositionName"];?></td>
+        <td><?php echo $objResult_rs["Levelf"];?></td>
+        <td align="center"><a href="<?php echo $objResult_rs["CEO_doc"];?>"><div class="fa fa-download" aria-hidden="true"></div></a></td>
+        <td align="center"><a href="<?php echo $objResult_rs["CEO_pdf"];?>" target="_blank"><div class="fa fa-download" aria-hidden="true"></div></a></td>
+      </tr>
+    <?php  
+	}
+}	
+?>
